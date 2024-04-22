@@ -15,19 +15,19 @@ public class Device {
             inetAddress = InetAddress.getByName("230.0.0.1");
             deviceName = inetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    //테스커 기기에서 보낸 메세지 받기
+    //초기 설정, 기기에서 보낸 메세지 받기
     public String receive(){
         try {
-     
+    
             while (true) {
-                MulticastSocket multicastSocket = new MulticastSocket(5555);
+                MulticastSocket multicastSocket = new MulticastSocket(5554);
                 multicastSocket.joinGroup(inetAddress);
                 multicastSocket.setLoopbackMode(true);
+                System.out.println("메세지 대기중");
 
                 byte[] data = new byte[55555];
                 DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
