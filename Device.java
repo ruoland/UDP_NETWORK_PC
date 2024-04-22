@@ -21,10 +21,8 @@ public class Device {
 
     //초기 설정, 기기에서 보낸 메세지 받기
     public String receive(){
-        try {
-    
+        try(MulticastSocket multicastSocket = new MulticastSocket(5554)) {
             while (true) {
-                MulticastSocket multicastSocket = new MulticastSocket(5554);
                 multicastSocket.joinGroup(inetAddress);
                 multicastSocket.setLoopbackMode(true);
                 System.out.println("메세지 대기중");
