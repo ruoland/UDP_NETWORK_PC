@@ -16,6 +16,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         restart();
+        TrayIconForTasks trayIconForTasks = new TrayIconForTasks();
+        TrayIconForTasks.launch();
         commandSocket();
         commandReceive();
     }
@@ -37,6 +39,8 @@ public class Main {
 
                     String[] deviceCommand = Util.splitMessage(dp.getData());
                     String device = deviceCommand[0];
+                    if(!device.equals(FindingDevice.pcName))
+                        return;
                     String command = deviceCommand[1];
                     System.out.println(device + " - " + command);
                 } catch (Exception e) {

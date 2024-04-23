@@ -3,7 +3,5 @@
     "java.project.sourcePaths": [
         "."
     ],
-    "java.project.referencedLibraries": [
-        "c:\\Users\\opron\\Downloads\\gson-2.10.1.jar"
-    ]
+    "java.project.referencedLibraries": []
 }

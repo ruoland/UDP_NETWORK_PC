@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class FindingDevice {
-    String pcName;
+    static String pcName;
     boolean connect;
     HashMap<String, Device> androidDeviceMap = new HashMap<>();
 
