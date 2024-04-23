@@ -5,15 +5,15 @@ import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
-public class Device {
+public class Device  {
     private InetAddress inetAddress;
-    MulticastSocket multicastSocketToAndroid;
-    String deviceName;
+    transient MulticastSocket multicastSocketToAndroid;
+    String androidName, pcName;
+
     Device(){
         try {
-            
             inetAddress = InetAddress.getByName("230.0.0.1");
-            deviceName = inetAddress.getLocalHost().getHostName();
+            pcName = InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -42,41 +42,27 @@ public class Device {
         return null;
     }
 
-    //테스커 기기로 보내기
-    public void sendDeviceInfo(String message){
-        try{
-            if(multicastSocketToAndroid == null){
-                multicastSocketToAndroid = new MulticastSocket();
-                multicastSocketToAndroid.joinGroup(inetAddress);
-                multicastSocketToAndroid.setLoopbackMode(true);
-            }
-            byte[] messageBuffer = message.getBytes("UTF-8");
-            DatagramPacket dp = new DatagramPacket(messageBuffer, messageBuffer.length, inetAddress, 5554);
-            multicastSocketToAndroid.send(dp);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
     public void sendMessage(String message){
         try{
             if(multicastSocketToAndroid == null){
                 multicastSocketToAndroid = new MulticastSocket();
                 multicastSocketToAndroid.joinGroup(inetAddress);
                 multicastSocketToAndroid.setLoopbackMode(true);
+                
             }
             String deviceName = InetAddress.getLocalHost().getHostName();
-;
+            
             byte[] messageBuffer = (deviceName+":"+message).getBytes("UTF-8");
             DatagramPacket dp = new DatagramPacket(messageBuffer, messageBuffer.length, inetAddress, 5555);
-            System.out.println(dp);
-
             multicastSocketToAndroid.send(dp);
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    
+    public void close(){
+        if(multicastSocketToAndroid != null)
+             multicastSocketToAndroid.close();
+    }
 
 }
