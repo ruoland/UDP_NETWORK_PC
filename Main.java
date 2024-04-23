@@ -12,13 +12,16 @@ import java.util.Scanner;
 
 public class Main {
 
-    static final FindingDevice findingDevice = new FindingDevice();
+    static FindingDevice findingDevice;
 
     public static void main(String[] args) {
+        restart();
+    }
+
+    public static void restart(){
+        findingDevice = new FindingDevice();
         findingDevice.start();
         findingDevice.loadDevice();
-        commandSocket();
-
     }
 
     public static void commandSocket() {

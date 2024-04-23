@@ -17,7 +17,6 @@ public class ReceiveCommand {
         
         try {
             Socket socket = new Socket(InetAddress.getByName("localhost"), 55556);
-
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             dos.writeUTF(device+":"+deviceCommand);
