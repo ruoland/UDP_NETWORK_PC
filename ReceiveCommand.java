@@ -1,11 +1,8 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Arrays;
 
-import javax.xml.crypto.Data;
 
 public class ReceiveCommand {
 
@@ -13,8 +10,6 @@ public class ReceiveCommand {
         String device = args[0];
         String deviceCommand= getStringArray(args, 1, args.length, " ");
         System.out.println(device + ":"+deviceCommand);
-        
-        
         try {
             Socket socket = new Socket(InetAddress.getByName("localhost"), 55556);
             DataInputStream dis = new DataInputStream(socket.getInputStream());
@@ -24,7 +19,6 @@ public class ReceiveCommand {
             System.out.println(dis.readUTF());
             socket.close();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
