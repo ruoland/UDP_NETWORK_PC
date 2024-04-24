@@ -1,3 +1,6 @@
+package com.device.app;
+
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -5,7 +8,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
 public class Util {
-    static InetAddress inetAddress;
+    private static InetAddress inetAddress;
 
     static{
         try {
@@ -47,11 +50,37 @@ public class Util {
     }
 
     public static String[] splitMessage(byte[] messageBuffer){
-        String[] deviceCommand = new String(messageBuffer, StandardCharsets.UTF_8).trim().split(":", 2);
+        String[] deviceCommand = new String(messageBuffer, StandardCharsets.UTF_8).trim().split(":", 3);
         return deviceCommand;
     }
     public static String[] splitMessage(String messageBuffer){
-        String[] deviceCommand = messageBuffer.trim().split(":", 2);
+        String[] deviceCommand = messageBuffer.trim().split(":", 3);
         return deviceCommand;
+    }
+
+    public static String makeMessage(Device device, String message){
+        StringBuffer messageBuffer = new StringBuffer(getThisPC().getHostName());
+        messageBuffer.append(":").append(device.getDeviceName()).append(":").append(message);
+        return messageBuffer.toString();
+    }
+    public static byte[] makeMessageBuffer(Device device, String message) throws UnsupportedEncodingException {
+        StringBuffer messageBuffer = new StringBuffer(getThisPC().getHostName());
+        messageBuffer.append(":").append(device.getDeviceName()).append(":").append(message);
+        return messageBuffer.toString().getBytes("UTF-8");
+    }
+    public static InetAddress getThisPC(){
+        InetAddress inetAddress1 = null;
+        try {
+            inetAddress1 = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        return inetAddress1;
+    }
+
+    public static InetAddress getMulticastAddress(){
+
+        return inetAddress;
+
     }
 }

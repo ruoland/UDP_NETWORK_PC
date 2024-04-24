@@ -1,3 +1,5 @@
+package com.device.app;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -17,22 +19,9 @@ public class TrayAgain {
             trayIcon.setImageAutoSize(true);
             trayIcon.setToolTip("툴팁");
 
-            trayFrame = new TrayMenu(trayIcon);
-            trayFrame.addItem("기기 찾는 중", new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+            addFrame();
 
-                }
-            });
-            trayFrame.addItem("연결된 기기", new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            trayIcon.displayMessage("메세지 전달하기", "안녕!", TrayIcon.MessageType.INFO);
-                        }
-            });
             SystemTray.getSystemTray().add(trayIcon);
-
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -42,20 +31,36 @@ public class TrayAgain {
         return trayIcon;
     }
 
-    public static void addDeviceMenu(String menu, Device device){
-        TrayMenu.addItem(menu, new ActionListener() {
+    public static void addFrame(){
+        trayFrame = new TrayMenu(trayIcon);
+        trayFrame.addItem("기기 찾는 중", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int select = JOptionPane.showConfirmDialog(null, "이 기기와의 연결을 끊을까요?", "기기 연결 끊기", JOptionPane.YES_NO_OPTION);
-                if(select == JOptionPane.YES_OPTION){
-                    Main.findingDevice.removeDevice(device.androidName);
-                    System.out.println(device.androidName);
 
-                }
-                else if(select == JOptionPane.NO_OPTION){
-                    return;
-                }
             }
+        });
+        trayFrame.addItem("연결된 기기", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                trayIcon.displayMessage("메세지 전달하기", "안녕!", TrayIcon.MessageType.INFO);
+            }
+        });
+    }
+
+    public static void addDeviceMenu(String menu, Device device){
+        TrayMenu.addItem(menu, e -> {
+            int select = JOptionPane.showConfirmDialog(null, "이 기기와의 연결을 끊을까요?", "기기 연결 끊기", JOptionPane.YES_NO_OPTION);
+            if(select == JOptionPane.YES_OPTION){
+                Main.findingDevice.removeDevice(device.getDeviceName());
+                System.out.println(device.getDeviceName());
+            }
+        });
+        TrayMenu.addItem(menu, e -> {
+            String text = JOptionPane.showInputDialog(null, device.getDeviceName()+"이 기기에게 메세지를 보내기");
+
+                Main.findingDevice.removeDevice(device.getDeviceType());
+                System.out.println(device.getDeviceType());
+
         });
     }
 

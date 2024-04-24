@@ -1,21 +1,18 @@
+package com.device.app;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URLEncoder;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Scanner;
 
 public class Main {
 
-    static FindingDevice findingDevice;
+    static DeviceManager findingDevice;
     static TrayAgain trayAgain = new TrayAgain();
-
+    static DevicePC thisDevice;
     public static void main(String[] args) throws Exception {
+        thisDevice = new DevicePC();
         restart();
         trayAgain.makeTrayIcon();
         commandSocket();
@@ -23,12 +20,14 @@ public class Main {
     }
 
     public static void restart() throws Exception {
-        findingDevice = new FindingDevice();
-        findingDevice.pcName = InetAddress.getLocalHost().getHostName();
-        findingDevice.start();
+        findingDevice = new DeviceManager();
+        findingDevice.findDevice();
         findingDevice.loadDevice();
     }
 
+    /**
+     * 받은 명령어를 트레이 알림으로 표시
+     */
     public static void commandReceive() {
         new Thread(() -> {
             while (true) {
@@ -36,13 +35,14 @@ public class Main {
                     byte[] messageBuffer = new byte[256];
                     DatagramPacket dp = Util.createPacket(messageBuffer);
                     multicastSocket.receive(dp);
-
                     String[] deviceCommand = Util.splitMessage(dp.getData());
-                    String device = deviceCommand[0];
-                    if(!device.equals(FindingDevice.pcName))
+                    String deviceName = deviceCommand[0];
+
+                    if(!deviceName.equals(Util.getThisPC().getHostName()))
                         return;
                     String command = deviceCommand[1];
-                    System.out.println(device + " - " + command);
+
+                    TrayAgain.trayIcon.displayMessage(deviceName, command, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                     break;
@@ -60,19 +60,19 @@ public class Main {
                     DataInputStream dis = new DataInputStream(socket.getInputStream());
                     DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-                    String[] deviceCommand = Util.splitMessage(dis.readUTF());
-                    String device = deviceCommand[0];
-                    String command = deviceCommand[1];
+                    String[] deviceCommand = Util.splitM2essage(dis.readUTF());
+                    Device device = DeviceManager.getDevice(deviceCommand[1]);
+                    String command = deviceCommand[2];
                     System.out.println(device + " - " + command);
 
-                    if (findingDevice.getDevice(device) != null) {
+                    if (device != null) {
                         dos.writeUTF(device + "에게 잘 전송됨");
 
                         socket.close();
-                        findingDevice.getDevice(device).sendMessage(command);
+                        DeviceManager.thisDevice().sendMessageToDevice(device, command);
 
                     } else {
-                        dos.writeUTF(device + "는 연결된 적이 없거나 연결되지 않은 기기");
+                        dos.writeUTF(device.getDeviceName() + "는 연결된 적이 없거나 연결되지 않은 기기");
                     }
 
                 } catch (Exception e) {

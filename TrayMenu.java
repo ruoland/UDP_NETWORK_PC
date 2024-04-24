@@ -1,3 +1,5 @@
+package com.device.app;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -44,12 +46,10 @@ public class TrayMenu extends Frame {
         return popupMenu;
     }
 
-    public static boolean isRegistered() {
+    public static boolean isTrayOn() {
         return (TrayAgain.getTrayIcon() != null && TrayAgain.getTrayIcon().getPopupMenu() != null);
     }
-    public static boolean isNotRegistered() {
-        return !isRegistered();
-    }
+
     public static void addItem(String label, ActionListener action) {
         MenuItem menuItem = new MenuItem(label);
         menuItem.addActionListener(action);
@@ -63,7 +63,7 @@ public class TrayMenu extends Frame {
         itemMap.put(label, menuItem);
     }
     private static void add(MenuItem item) {
-        if (isNotRegistered()) {
+        if (!isTrayOn()) {
             return;
         }
         PopupMenu popupMenu = getPopupMenu();
