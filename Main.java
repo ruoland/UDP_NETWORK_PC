@@ -16,8 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         restart();
-        TrayIconForTasks trayIconForTasks = new TrayIconForTasks();
-        TrayIconForTasks.launch();
+      
         commandSocket();
         commandReceive();
     }

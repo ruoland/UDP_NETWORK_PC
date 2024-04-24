@@ -3,5 +3,15 @@
     "java.project.sourcePaths": [
         "."
     ],
-    "java.project.referencedLibraries": []
+    "java.project.referencedLibraries": [
+        "c:\\Users\\opron\\Downloads\\lib\\javafx.base.jar",
+        "c:\\Users\\opron\\Downloads\\lib\\javafx.controls.jar",
+        "c:\\Users\\opron\\Downloads\\lib\\javafx.fxml.jar",
+        "c:\\Users\\opron\\Downloads\\lib\\javafx.graphics.jar",
+        "c:\\Users\\opron\\Downloads\\lib\\javafx.media.jar",
+        "c:\\Users\\opron\\Downloads\\lib\\javafx.swing.jar",
+        "c:\\Users\\opron\\Downloads\\lib\\javafx.web.jar",
+        "c:\\Users\\opron\\Downloads\\lib\\javafx-swt.jar"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
