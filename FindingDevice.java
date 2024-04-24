@@ -67,8 +67,21 @@ public class FindingDevice {
         androidDeviceMap.put(device.androidName, device);
         sendDeviceInfo(pcName + ":초기 연결");
         System.out.println(device.androidName + "기기와 연결됨");
+        TrayAgain.addDeviceMenu(device.androidName, device);
         connect = true;
         saveDevice();
+    }
+
+    public void removeDevice(String device){
+        if (!androidDeviceMap.containsKey(device) || !androidDeviceMap.get(device).isConnected){
+            return;
+        }
+        Device device1 = androidDeviceMap.get(device);
+        device1.sendMessage("이 기기는 해고 되었습니다.");
+        device1.isConnected = false;
+        System.out.println(device1.androidName + "와 연결 끊김");
+        androidDeviceMap.remove(device);
+        TrayMenu.removeDevice(device);
     }
 
     public void saveDevice() {

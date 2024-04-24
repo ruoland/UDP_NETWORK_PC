@@ -13,10 +13,11 @@ import java.util.Scanner;
 public class Main {
 
     static FindingDevice findingDevice;
+    static TrayAgain trayAgain = new TrayAgain();
 
     public static void main(String[] args) throws Exception {
         restart();
-      
+        trayAgain.makeTrayIcon();
         commandSocket();
         commandReceive();
     }
